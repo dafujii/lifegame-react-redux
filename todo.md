@@ -1,0 +1,74 @@
+# README
+
+目的: LifeGame を React + Redux + TypeScript で作る！
+
+## TODO
+
+- [x] プロジェクトを作りたい
+  - [x] `npm init`
+  - [x] `create-react-app --typescript` で TypeScript のプロジェクトを生成する
+  - [x] Redux 化する
+    - [x] 必要・定番のライブラリをインストール
+      - `npm install --save redux`
+      - `npm install -S react-redux; npm install --save-dev redux-devtools`
+      - `npm install --save @reduxjs/toolkit`
+    - [x] 型定義ファイル
+      - `npm install -D @types/react-redux`
+      - `npm install -D @types/react-dom`
+    - [x] VSCode が型を認識しないので node_modules を消して `npm install` した
+      - `mv` で create-react-app の生成物を移動させたからかも？
+    - [x] index.tsx とかをいじる
+      - [x] Provider https://react-redux.js.org/introduction/quick-start#provider
+      - [x] store.tsx を作る
+        - [x] Redux Toolkit の configureStore, createAction, createReducer を使った
+        - [ ] ~~LifeGameのimport~~😇
+        - [x] lifegame-typescriptのコードからコピペする
+- [ ] ~~LifeGame のライブラリを利用する~~😇
+  - ↑ダメだったので、諦めてソースをコピペすることにした
+    - インストール時に `npm run build` が走ってない
+    - 元のレポジトリでの `npm run build` は正常に完了するが、 node_modules/lifegame-typescript の下で `npm run build` を叩くと失敗する
+  - [x] `npm install -S dafujii/lifegame-typescript`
+  - [x] lifegame-typescript 側を変更する
+    - [x] index.ts を追加
+    - [x] 型定義ファイル出力のために tsconfig.json を変更
+      - [x] `"declaration: true"`
+    - [x] d.ts の rollup をする (ゴール: build/typings.d.ts が npm run build した時に生成されること)
+      - [x] `npm install -D @microsoft/api-extractor`
+      - [x] api-extractor.json を作る(テンプレートから生成 or 手で書く)
+    - [x] package.json を変更
+      - [x] "scripts" に "build" コマンドを追加 (予想: tsc && api-extractor run --local)
+      - [x] `"main": "build/index.js"`
+      - [x] `"types": "build/typings.d.ts"`
+- [x] Worldを表示するコンポーネントを作る
+  - [x] WorldView
+  - [x] CellView
+    - aliveの時に黒く、deadの時に水色になる
+- [x] Player
+  - Next ボタン
+- [x] ディレクトリ構成をまともにする
+  - 現状は ./src 直下に WorldView.tsx, WorldView.css があって良くない
+  - Re-ducksパターンとやらに沿うべきな気がする
+  - 具体的にどんなディレクトリ構成になるか？
+  - [x] ./state ... 状態管理系をまとめる
+  - [x] ./views ... 見た目に関するものをまとめる
+- [ ] 自動再生
+  - アプリケーションの振る舞い
+    - [x] 起動したら自動再生が始まる
+    - [x] ボタンを押して自動再生を止める
+    - [x] ボタンを押して自動再生を再開する
+    - [x] 自動再生中はNextボタンを押せない
+  - コード的なToDo
+    - [x] Stateに「自動再生中」という状態を追加する
+    - [x] 「自動再生中」状態を参照して 自動再生/再生停止 ボタンを作る
+    - [x] 「自動再生中」状態を参照してNextボタンの見た目を変える
+    - [x] 「自動再生開始」「自動再生停止」アクションを定義する
+    - [x] 「自動再生開始」アクションが発行されたら自動再生を始める
+    - [x] 「自動再生停止」アクションが発行されたら自動再生を止める
+    - [x] ページの読み込み時に「自動再生開始」アクションを発行する
+      - AppのcomponentDidMountの中でstartAutoPlayアクションをdispatchする
+    - [x] 自動再生中はNextボタンをdisabledにする
+    - [ ] redux-saga redux-xxxx みたいなMiddlewareを使うべきかも？
+      - 現状はreducerでタイマーを開始してるけど、こういう副作用がreducerの中にあるのはアンチパターンと言われてた気がする
+- [ ] History?
+- [ ] 初期値を色々変えられる機能?
+- [ ] API(外部との通信)を使うようにする
